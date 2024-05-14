@@ -1,0 +1,160 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: rgb(233,175,200);
+            background: radial-gradient(circle, rgba(233,175,200,1) 0%, rgba(209,209,149,1) 100%);
+            background-size: cover;
+            background-attachment: fixed;
+            color: #fff;
+            position: relative; /* Ensure the position is relative for absolute positioning */
+        }
+        .dashboard {
+            margin: 85px auto;
+            width: 80%;
+            background: rgba(0, 0, 0, 0.8); /* Semi-transparent background */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            animation: scaleIn 0.5s ease-out;
+        }
+        .dashboard h1 {
+            font-size: 28px;
+            color: #ffcc00; /* Gold color for titles */
+        }
+        .section {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1); /* Light semi-transparent white for inner sections */
+            border-radius: 5px;
+            animation: fadeInUp 0.5s ease-out; 
+        }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px 0;
+            background-color: #00acee; /* Twitter blue for buttons */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #007bb5; /* Darker blue when hovered */
+        }
+
+        .b_id {
+            background-color: #1f1681;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 11px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease; /* Smooth transition for all changes */
+            text-decoration: none; /* Prevents underlining text if used on an <a> tag styled as button */
+        }
+
+        .b_id:hover {
+            box-shadow: 0 0 15px #00acee; /* Adds a glow effect on hover */
+            transform: translateY(-3px); /* Slight lift effect */
+        }
+
+        .b_id:active {
+            transform: translateY(1px); /* Simulates button press down effect */
+        }
+        /* Positioning for the greeting message */
+        .greeting-msg {
+            position: absolute;
+            top: -40px;
+            right: 135px;
+            font-size: 20px;
+            color: #ffcc00; /* Gold color */
+            background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent black background */
+            padding: 5px 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Shadow effect */
+        }
+        /* Animation for sections */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(60px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* Animation for dashboard */
+        @keyframes scaleIn {
+            from {
+                transform: scale(0.7);
+            }
+            to {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="dashboard">
+    <h1>Payment Admin Dashboard</h1>
+
+    <div class="section">
+        <h2>Billing Details</h2>
+        <!-- Ensure the onclick attribute contains valid JavaScript code to navigate to the URL -->
+        <!-- HTML -->
+        <button id="viewDetailsBtn" class="b_id">View Billing Details</button>
+        <script>
+            document.getElementById('viewDetailsBtn').addEventListener('click', function() {
+            window.location.href = "{% url 'View_Details' %}";
+          });
+          </script>
+    </div>
+    <div class="section">
+        <h2>Employee's Salary Details</h2>
+        <button id="emplyeeSalarybtn" class="b_id" >
+            View Salary Details
+        </button>
+        <script>
+            document.getElementById('emplyeeSalarybtn').addEventListener('click', function() {
+            window.location.href = "{% url 'employee_salary' %}";
+          });
+          </script>
+    </div>
+</div>
+<!-- JavaScript to add the greeting message -->
+<script>
+    // Get the current date and time
+    const now = new Date();
+    const hours = now.getHours();
+
+    // Set the greeting message based on the time of day
+    let greeting = '';
+    if (hours >= 5 && hours < 12) {
+        greeting = 'Good morning,';
+    } else if (hours >= 12 && hours < 18) {
+        greeting = 'Good afternoon,';
+    } else {
+        greeting = 'Good evening,';
+    }
+
+    // Append the greeting message to the body
+    const greetingSpan = document.createElement('span');
+    greetingSpan.textContent = `${greeting} VITHUSHANA! Payment Manager`;
+    greetingSpan.classList.add('greeting-msg');
+
+    // Append the greeting message to the body
+    document.body.appendChild(greetingSpan);
+</script>
+
+</body>
+</html>

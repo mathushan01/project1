@@ -1,0 +1,124 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Card Payment</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<style>
+    body {
+    font-family: Arial, sans-serif;
+    background-image: url("{%static 'images/payment/card.webp'%}");
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 30px;
+    background: rgb(165,76,225);
+    background: linear-gradient(90deg, rgb(186, 116, 233) 0%, rgb(207, 112, 112) 50%, rgb(236, 200, 149) 100%);
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+button[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    font-size: 16px;
+    margin-top: 5px;
+}
+
+input[type="text"]:focus,
+button[type="submit"]:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}
+
+button[type="submit"] {
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+}
+
+button[type="submit"]:hover {
+    background-color: #0056b3;
+}
+
+</style>
+<body>
+    <h1>Card Payment</h1>
+    <div class="container">
+        <form id="paymentForm" method="post" action="card_method" >
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="cardNumber">Card Number</label>
+                <input type="text" id="cardNumber" name="cardNumber" maxlength="16" placeholder="Enter card number" required>
+            </div>
+            <div class="form-group">
+                <label for="expiryDate">Expiration Date (MM/YY)</label>
+                <input type="text" id="expiryDate" name="expiryDate" maxlength="5" placeholder="MM/YY" required>
+            </div>
+            <div class="form-group">
+                <label for="cvv">CVV</label>
+                <input type="text" id="cvv" name="cvv" maxlength="3" placeholder="CVV" required>
+            </div>
+            <button type="submit">Pay Now</button>
+        </form>
+    </div>
+
+    <script>
+        // In script.js
+document.addEventListener('DOMContentLoaded', function() {
+    const paymentForm = document.getElementById('paymentForm');
+
+    // Function to handle form submission
+    function handleFormSubmit(event) {
+        event.preventDefault(); // Prevent form submission
+
+        // Validate form fields here
+        const cardNumber = document.getElementById('cardNumber').value;
+        const expiryDate = document.getElementById('expiryDate').value;
+        const cvv = document.getElementById('cvv').value;
+
+        if (cardNumber.trim() === '' || expiryDate.trim() === '' || cvv.trim() === '') {
+            alert('Please fill in all required fields.'); // Display alert if any field is empty
+        } else {
+            alert('Details uploaded successfully!'); // Display success message
+            paymentForm.submit(); // Submit the form
+        }
+    }
+
+    // Event listener for form submission
+    paymentForm.addEventListener('submit', handleFormSubmit);
+});
+
+    </script>
+</body>
+</html>

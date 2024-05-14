@@ -1,0 +1,111 @@
+{% extends "Employee/base.html" %}
+
+{% block title %}Add New Employee Records{% endblock title %}
+
+{% block content %}
+ <div class="col-md-12">
+    <form method="POST" class="post-form" action="/Employee/addnew" onsubmit="return validateForm()">
+        {% csrf_token %}
+        <div class="container">
+            <div class="col-12">
+                <h3>Enter Details</h3>
+            </div>
+
+        <div class="mb-3">
+            <label>First Name:</label>
+            {{form.firstName}}
+        </div>
+        <div class="mb-3">
+            <label>Last Name:</label>
+            {{form.lastName}}
+        </div>
+        <div class="mb-3">
+            <label>Emp ID:</label>
+            {{form.empID}}
+        </div>
+        <div class="mb-3">
+            <label>Basic Salary:</label>
+            {{form.basicSalary}}
+        </div>
+        <div class="mb-3">
+            <label>Age:</label>
+            {{form.age}}
+        </div>
+        <div class="mb-3">
+            <label>Phone Number:</label>
+            {{form.phoneNumber}}
+        </div>
+        <div class="mb-3">
+            <label>Position:</label>
+            {{form.position}}
+        </div>
+        <div class="mb-3">
+            <label>Gender:</label>
+            {{form.gender}}
+        </div>
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+        </div>
+        </form>
+ </div>
+
+ <script>
+    function validateForm() {
+        
+        var firstName = document.querySelector('.form-control[name="firstName"]').value.trim();
+        var lastName = document.querySelector('.form-control[name="lastName"]').value.trim();
+        var empID = document.querySelector('.form-control[name="empID"]').value.trim();
+        var basicSalary = document.querySelector('.form-control[name="basicSalary"]').value.trim();
+        var age = document.querySelector('.form-control[name="age"]').value.trim();
+        var phoneNumber = document.querySelector('.form-control[name="phoneNumber"]').value.trim();
+        var position = document.querySelector('.form-control[name="position"]').value.trim();
+        var gender = document.querySelector('.form-control[name="gender"]').value.trim();
+ 
+        var lettersOnly = /^[A-Za-z]+$/;
+        var numbersOnly = /^[0-9]+$/;
+ 
+        if (!firstName.match(lettersOnly)) {
+            alert('First Name should contain only letters.');
+            return false;
+        }
+ 
+        if (!lastName.match(lettersOnly)) {
+            alert('Last Name should contain only letters.');
+            return false;
+        }
+ 
+        if (!empID.match(numbersOnly)) {
+            alert('Emp ID should contain only numbers.');
+            return false;
+        }
+ 
+        if (!basicSalary.match(numbersOnly)) {
+            alert('Basic Salary should contain only numbers.');
+            return false;
+        }
+ 
+        if (!age.match(numbersOnly)) {
+            alert('Age should contain only numbers.');
+            return false;
+        }
+ 
+        if (!phoneNumber.match(numbersOnly) || !phoneNumber.match(/^\d{10}$/)) {
+            alert('Phone Number should contain 10 numbers only.');
+            return false;
+        }
+ 
+        if (!position.match(lettersOnly)) {
+            alert('Position should contain only letters.');
+            return false;
+        }
+ 
+        if (!gender.match(lettersOnly)) {
+            alert('Gender should contain only letters.');
+            return false;
+        }
+ 
+        return true; // Submit the form if all validations pass
+    }
+</script>
+{% endblock content %}

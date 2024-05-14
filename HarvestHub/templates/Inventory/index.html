@@ -1,0 +1,107 @@
+{% extends "layouts/main.html" %}
+ 
+{% block title %}Add New Inventory Records{% endblock title %}
+ 
+{% block content %}
+<br><br><br>
+ <div class="col-md-12">
+    <form method="POST" class="post-form" action="/Inventory/addnew" enctype="multipart/form-data" onsubmit="return validateForm()">
+        {% csrf_token %}
+        <div class="container">
+            <div class="col-12">
+                <h3>Enter Details</h3>
+            </div>
+ 
+        <div class="mb-3">
+            <label>Crop Name:</label>
+            {{form.cropName}}
+        </div>
+        <div class="mb-3">
+            <label>Crop Type:</label>
+            {{form.cropType}}
+        </div>
+        <div class="mb-3">
+            <label>Image:</label>
+            {{form.image}}
+        </div>
+        <div class="mb-3">
+            <label>Quantity:</label>
+            {{form.quantity}}
+        </div>
+        <div class="mb-3">
+            <label>Expiry Date:</label>
+            {{form.expiryDate}}
+        </div>
+        <div class="mb-3">
+            <label>Supplier:</label>
+            {{form.supplier}}
+        </div>
+        <div class="mb-3">
+            <label>Price Per Unit:</label>
+            {{form.pricePerUnit}}
+        </div>
+        <div class="mb-3">
+            <label>Status:</label>
+            {{form.status}}
+        </div>
+        <div class="mb-3">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+        </div>
+        </form>
+ </div>
+ 
+ {% endblock content %}
+
+{% block scripts %}
+   <script>
+    function validateForm() {
+        var cropName = document.querySelector('.post-form input[name="cropName"]').value.trim();
+        var cropType = document.querySelector('.post-form input[name="cropType"]').value.trim();
+        var quantity = document.querySelector('.post-form input[name="quantity"]').value.trim();
+        var expiryDate = document.querySelector('.post-form input[name="expiryDate"]').value.trim();
+        var supplier = document.querySelector('.post-form input[name="supplier"]').value.trim();
+        var pricePerUnit = document.querySelector('.post-form input[name="pricePerUnit"]').value.trim();
+        var status = document.querySelector('.post-form input[name="status"]').value.trim();
+
+        var lettersOnly = /^[A-Za-z]+$/;
+        var numbersOnly = /^[0-9]+$/;
+
+        if (!cropName.match(lettersOnly)) {
+            alert('Crop Name should contain only letters.');
+            return false;
+        }
+
+        if (!cropType.match(lettersOnly)) {
+            alert('Crop Type should contain only letters.');
+            return false;
+        }
+
+        if (!quantity.match(numbersOnly)) {
+            alert('Quantity should contain only numbers.');
+            return false;
+        }
+
+        if (!supplier.match(lettersOnly)) {
+            alert('supplier should contain only letters.');
+            return false;
+        }
+
+        if (!pricePerUnit.match(numbersOnly)) {
+            alert('pricePerUnit should contain only numbers.');
+            return false;
+        }
+
+        if (!status.match(lettersOnly)) {
+            alert('status should contain only letters.');
+            return false;
+        }
+
+
+
+        // Additional validation logic can be added here if needed
+
+        return true;
+    }
+</script>
+{% endblock scripts %}

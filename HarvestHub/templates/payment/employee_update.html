@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Employee Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url("{%static 'images/payment/employee.png'%}");
+            background-repeat: no-repeat;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+            background: rgb(101,233,223);
+            background: linear-gradient(90deg, rgb(131, 233, 224) 0%, rgb(219, 158, 224) 35%, rgba(113,206,224,1) 100%);
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        input[type="text"],
+        input[type="date"],
+        input[type="submit"] {
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 3px solid #939191;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #8a0404;
+        }
+
+        .btn-back {
+            background-color: #6c757d;
+            color: #fff;
+        }
+
+        .btn-back:hover {
+            background-color: #343a40;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Update Employee Data</h1>
+        <form action="/payment/update_employee_data/{{ employee.id }}" method="POST">
+            {% csrf_token %}
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" value="{{ employee.name }}">
+
+            <label for="card_number">Card Number:</label>
+            <input type="text" id="card_number" name="card_number" value="{{ employee.card_number }}">
+
+            <label for="amount">Amount:</label>
+            <input type="text" id="amount" name="amount" value="{{ employee.amount }}">
+
+            <label for="date">Date:</label>
+            <input type="date" id="date" name="date" value="{{ employee.date }}">
+
+            <input type="submit" value="Update">
+        </form>
+        <form action="{% url 'employee_salary' %}" method="get">
+            <input type="submit" value="Back" class="btn btn-back">
+        </form>
+    </div>
+</body>
+</html>

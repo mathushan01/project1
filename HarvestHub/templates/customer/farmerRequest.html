@@ -1,0 +1,83 @@
+{% extends 'customer/base.html'%}
+{%load static%}
+{%block title%}Over View {%endblock title%}
+{%block middle%}
+<div class="customerPage">
+     <span class="welcome">Farmer,<span class="nameWEl">Requests</span></span><br>
+     <span class="cus">Customer Request system</span><br>
+
+     <div class="allrequests">
+          {%for request in request %}
+          <div class="singleRequest">
+               <div class="name_and_dp">
+                    <div class="dppp">
+                         <img src="{{request.profilePhoto}}" alt="">
+                    </div>
+                    <div class="nameee">
+                         <span class="nnn">{{request.first_name}}</span>
+                         <span class="rrrr">{{request.user_name}}</span>
+                    </div>
+               </div>
+               <div class="details">
+                    <span>Recieved a request to become a member of farmer assosiation from {{request.province}}</span>
+                    <form action="farmerRequest" method="post">{%csrf_token%}
+                         <input type="hidden" value="{{request.user_name}}" name="famUser">
+                         <input type="submit" value="View" class="viecwFR" name="ramReqAns">
+                    </form>
+               </div>
+          </div>
+          {%endfor%}
+     </div>
+     
+</div>
+{%endblock middle%}
+{%block right%}
+
+{%if selected is not None%}
+<div class="wholeDetailse">
+     <div class="profileAd">
+          <img src="{{userData.profilePhoto}}" alt="">
+     </div>
+     <div class="usernameAdb">
+          <span class="headingAi">User Name </span>  <span> : {{userData.user_name}}</span>
+     </div>
+     <div class="emailAdb">
+          <span class="headingAi">Email</span>  <span>: {{userData.email}}</span>
+     </div>
+     <div class="phoneNoAdb">
+          <span class="headingAi">City</span>  <span>: {{userData.innerCity}}</span>
+     </div>
+     <div class="totalPurchesb">
+          <span class="headingAi">Distric</span>  <span>: {{userData.city}}</span>
+     </div>
+     <div class="dateJoinedb">
+         <span class="headingAi">Province</span>  <span>: {{userData.province}}</span>
+     </div>
+     <div class="bioAdb">
+          <span class="headingAi">Country</span>  <span> : {{userData.country}}</span>
+     </div>
+     <div class="bioAdb">
+          <span class="headingAi">Got on</span>  <span> : {{userData.sendDate}}</span>
+     </div>
+     <div class="bioAdd">
+          <form action="farmerRequest" method="post">{%csrf_token%}
+               <input type="hidden" name="choicer" value="{{userData.user_name}}">
+               {%if not userData.isConsiderd %}
+               <input value="Consider" type="submit" class="consider" name="ramReqAns">
+               <input value="Reject" type="submit" class="reject" name="ramReqAns">
+               {%else%}
+               <div class="considerd">
+                    <span>Considerd</span> 
+                    <img src="{% static 'images/customer/done.png'%}" alt="">
+                </div>
+               {%endif%}
+          </form>
+     </div>
+</div>
+{%endif%}
+{% for message in messages%}
+     <script>
+          alert('{{message}}')
+     </script>
+     {%endfor%}
+{%endblock right%}

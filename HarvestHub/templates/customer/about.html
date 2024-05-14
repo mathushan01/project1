@@ -1,0 +1,308 @@
+{% extends 'layouts/main.html'%}
+     {% load static%}
+     {% block title %}
+     About
+     {% endblock title %}
+
+     {% block css %}
+     <link rel="stylesheet" href="{%static 'css/customer/product_sell.css'%}">
+     <link rel="stylesheet" href="{% static 'css/customer/about.css' %}">
+     <script src="https://unpkg.com/scrollreveal"></script>
+     <script>
+          function displayImage(event) {
+               var fileInput = event.target;
+               var imageDisplay = document.getElementById('imageDisplay');
+           
+               if (fileInput.files && fileInput.files[0]) {
+                 var reader = new FileReader();
+           
+                 reader.onload = function(e) {
+                   imageDisplay.src = e.target.result;
+                   document.getElementById('imageDisplay').style.boxShadow='0 4px 8px 0 rgba(0, 0, 0, 0.06), 0 6px 20px 0 rgba(0, 0, 0, 0.071)'
+                   document.getElementById('rrree').style.display = "inline"
+                 };
+           
+                 reader.readAsDataURL(fileInput.files[0]);
+               }
+             }
+     </script>
+     {% endblock css%}
+     
+     
+     {% block content %}
+
+     <div class="body">
+          <div class="restPage">
+               <div class="white">
+                    
+                    
+               </div>
+               
+               <div class="image">
+                    <form action="about" method="post" enctype="multipart/form-data">{%csrf_token%}
+                    <label for="submit_2">
+                         <img id="imageDisplay" class="addImage" src="{{user.profile_photo.url}}" >
+                    </label>
+                    <input type="file" id="submit_2" class="hide" onchange="displayImage(event)" name="productImage" required>
+               </div>
+               <div class="detail1">
+                    <h2>Hii, {{user.first_name}}</h2>
+                    <p>Sustainable farmer | Dedicated to cultivating healthy crops with care for the environment | Constantly learning and sharing insights | Let's grow together </p>
+                   <a id="rrree" href="accountPage.php"><button value = "updateProfile" name="editProfile" type="submit">Update Profile</button></a>
+               </form>
+               </div>
+               
+               <div class="bigBox">
+                    {%if editable == None %}
+                         <div class="box" id="box1">
+                              <h2>01</h2>
+                              <div class="p">
+                                   <span>First Name : {{user.first_name}}</span>
+                                   <span>Last Name : {{user.last_name}}</span>
+                                   <span>{{user.status}} User</span>
+                                   <span>Joined {{user.joined_date}}</span>
+
+                              </div>
+                         </div>
+                         <div class="box" id="box2">
+                              <h2>02</h2>
+                              <div class="p">
+                                   <span>User Name : {{user.username}}</span>
+                                   <span>{{user.email}}</span>
+                                   <span>Phone No:{{user.phone_number}}</span>
+                                   <span>Total Purches :{{user.total_cart}}</span>
+                              </div>
+                         </div>
+                         <div class="box" id="box3">
+                              <h2>03</h2>
+                              <div class="pp">
+                                   
+                                   <span class="e"><form action="about" method="post">
+                                        {%csrf_token%}
+                                        <input class="backNone" type="submit" value="Change Email" name="editProfile">
+                              </span>
+                                   <span class="e">
+                                        <input class="backNone" type="submit" value="Change Password" name="editProfile">
+                                   </span>
+                                   <span class="e">
+                                        <input class="backNone" type="submit" value="Send Feedback" name="editProfile">
+                                   </span>
+                                   <span class="e">
+                                        <input class="backNone" type="submit" value="Send Farmer Request" name="editProfile">
+                                   </form></span>
+                              </div>
+                         </div>
+                    {%elif editable == "changeEmail"%}
+                         <div class="box" id="box1">
+                              <h2>01</h2>
+                              <div class="p">
+                                   <span>{{user.first_name}} ,<br> Enhance your account security by updating your email address</span>
+                              </div>
+                         </div>
+                         <div class="box" id="box2">
+                              <h2>02</h2>
+                              <div class="p">
+                                   <form action="about" class="pder" method="post">{%csrf_token%}
+                                        <input class="kkk" type="email" placeholder="Enter New Email" name="newEmail" required>
+                                        <input class="kkk" type="password" placeholder="Enter Password" name="password" required>
+                                        <input class="ddd" type="submit" value="Change" name="editProfile">
+                                   </form>           
+                              </div>
+                         </div>
+                         <div class="box" id="box3">
+                              <h2>03</h2>
+                              <div class="pp">
+                                   
+                                   <span class="e"><form action="about" method="post">
+                                        {%csrf_token%}
+                                        <input class="selectedOPT" type="submit" value="Change Email" name="editProfile">
+                              </span>
+                                   <span class="e">
+                                        <input class="backNone" type="submit" value="Change Password" name="editProfile">
+                                   </span>
+                                   <span class="e">
+                                        <input class="backNone" type="submit" value="Send Feedback" name="editProfile">
+                                   </span>
+                                   <span class="e">
+                                        <input class="backNone" type="submit" value="Send Farmer Request" name="editProfile">
+                                   </form></span>
+                              </div>
+                         </div>
+
+                    {%elif editable == "Change Password"%}
+                         <div class="box" id="box1">
+                              <h2>01</h2>
+                              <div class="p">
+                                   <span>{{user.first_name}} ,<br> Stay a step ahead of cyber threats: Change your password</span>
+                              </div>
+                         </div>
+                         <div class="box" id="box2">
+                              <h2>02</h2>
+                              <div class="p">
+                                   <form action="about" class="pder" method="post">{%csrf_token%}
+                                        <input class="kkk" type="password" placeholder="Enter Old Password" name="oldPW" required>
+                                        <input class="kkk" type="password" placeholder="Enter New Password" name="newPW" required>
+                                        <input class="ddd" type="submit" value="change" name="editProfile">
+                                   </form>           
+                              </div>
+                         </div>
+                         <div class="box" id="box3">
+                              <h2>03</h2>
+                              <div class="pp">
+                                   
+                                   <span class="e"><form action="about" method="post">
+                                        {%csrf_token%}
+                                        <input  type="submit" class="backNone" value="Change Email" name="editProfile">
+                              </span>
+                                   <span class="e">
+                                        <input class="selectedOPT"  type="submit" value="Change Password" name="editProfile">
+                                   </span>
+                                   <span class="e">
+                                        <input class="backNone" type="submit" value="Send Feedback" name="editProfile">
+                                   </span>
+                                   <span class="e">
+                                        <input class="backNone" type="submit" value="Send Farmer Request" name="editProfile">
+                                   </form></span>
+                              </div>
+                         </div>
+                    {%elif editable == "Contact Us"%}
+                         <div class="box" id="box1">
+                              <h2>01</h2>
+                              <div class="p">
+                                   <span>{{user.first_name}} ,<br> Need a hand? Don't hesitate to get in touch with us - we're just a message away!</span>
+                              </div>
+                         </div>
+                         <div class="box" id="box2">
+                              <h2>02</h2>
+                              <div class="p">
+                                   <form action="about" class="pder" method="post">{%csrf_token%}
+                                        <input class="kkk" type="text" placeholder="Subject" name="subject" required>
+                                        <input class="kkk" type="text" placeholder="Message" name="message" required>
+                                        <input class="ddd" type="submit" value="Send Message" name="editProfile">
+                                   </form>           
+                              </div>
+                         </div>
+                         <div class="box" id="box3">
+                              <h2>03</h2>
+                              <div class="pp">
+                                   
+                                   <span class="e"><form action="about" method="post">
+                                        {%csrf_token%}
+                                        <input  type="submit" class="backNone" value="Change Email" name="editProfile">
+                              </span>
+                                   <span class="e">
+                                        <input  class="backNone" type="submit" value="Change Password" name="editProfile">
+                                   </span>
+                                   <span class="e">
+                                        <input class="selectedOPT" type="submit" value="Send Feedback" name="editProfile">
+                                   </span>
+                                   <span class="e">
+                                        <input class="backNone" type="submit" value="Send Farmer Request" name="editProfile">
+                                   </form></span>
+                              </div>
+                         </div>
+                    {%elif editable == "Send Farmer Request"%}
+                         <div class="box" id="box1">
+                              <h2>01</h2>
+                              <div class="p">
+                                   <span >{{user.first_name}} ,<br> Turn your passion into profession!<br> Let's grow together! </span>
+                              </div>
+                         </div>
+                         <div class="box" id="box2">
+                              <h2>02</h2>
+                              <div class="p">
+                                   <form action="about" class="pder" method="post">{%csrf_token%}
+                                        <div class="p">
+                                             <span>Transform your family into farmers! We'll assess land, weather, and location for the perfect fit. If you qualify, expect an email from us. <br> Take the first step now!</span>
+                                        </div>
+                                        <input class="ddd" type="submit" value="Send Request" name="editProfile">
+                                   </form>           
+                              </div>
+                         </div>
+                         <div class="box" id="box3">
+                              <h2>03</h2>
+                              <div class="pp">
+                                   
+                                   <span class="e"><form action="about" method="post">
+                                        {%csrf_token%}
+                                        <input  type="submit" class="backNone" value="Change Email" name="editProfile">
+                              </span>
+                                   <span class="e">
+                                        <input  class="backNone" type="submit" value="Change Password" name="editProfile">
+                                   </span>
+                                   <span class="e">
+                                        <input class="backNone" type="submit" value="Send Feedback" name="editProfile">
+                                   </span>
+                                   <span class="e">
+                                        <input class="selectedOPT" type="submit" value="Send Farmer Request" name="editProfile">
+                                   </form></span>
+                              </div>
+                         </div>
+                    {%endif%}
+                    
+               </div>
+          </div>
+          
+</div>    
+<div class="center">
+     <div>
+          <div class="branchList">
+               YOU ARE OUR PRIDE 
+               <span class="million">1 MILLION + WE </span>
+          </div>  
+          <div class="branches">
+               <img src="{% static 'images/customer/elon.jpg'%}" alt="">
+          </div>
+     </div>
+     <div class="middle">
+          <div class="box">
+               <div class="circle">
+                    <img src="{% static 'images/customer/cartlogo.jpg'%}" alt="">
+               </div>
+               <div class="details">
+                    {% for  cart_item in cart_items%}
+                    <div class="oneDet">
+                         <div class="productPhoto">
+                              <img src="{{cart_item.image.url}}" alt="">
+                         </div>
+                         <div class="nameDes">
+                              <h5>{{cart_item.product_title}}</h5>
+                              {{cart_item.description}}
+                         </div>
+                         <a class="bNow" href="">Buy</a>
+                         <a class="dNow" href="{% url 'aboutd' cart_item.product_title %}">Delete</a>
+                    </div>
+                    {%endfor%}
+               </div>
+               
+          </div>
+          <div class="box">
+               <div class="circle">
+                    <img src="{% static 'images/customer/shopping.jpg'%}" alt="">
+               </div>
+               <div class="details">
+                    <div class="oneDet">
+                         <div class="productPhoto">
+                              <img src="{% static 'images/brakoli.jpg'%}" alt="">
+                         </div>
+                         <div class="nameDes">
+                              <h5>Brocoli</h5>
+                              Hello man this is brocolly
+                         </div>
+                         <div class="productPhoto">
+                              <img src="{% static 'images/customer/done.png'%}" alt="">
+                         </div>
+                    </div>
+               </div>
+          </div>
+          
+     </div>
+</div>  
+</body>
+{% for message in messages%}
+     <script>
+          alert('{{message}}')
+     </script>
+     {%endfor%}
+   {% endblock content%}
+         

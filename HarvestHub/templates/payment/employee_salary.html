@@ -1,0 +1,223 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sample Data Management</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url("{%static 'images/payment/employee.png'%}");
+            background-repeat: no-repeat;
+            background-size: cover;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 60px auto;
+            background: rgb(145,201,155);
+            background: radial-gradient(circle, rgba(145,201,155,1) 0%, rgba(182,136,184,1) 100%);
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        form {
+            margin-bottom: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-gap: 10px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            background-color: #c4c0c0;
+            border: 1px solid #989595;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        th, td {
+            border: 1px solid #464444;
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #7b7878;
+        }
+
+        .action-btns {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .action-btns button {
+            margin-right: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .delete-btn {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+        .edit-btn {
+            background-color: #ffc107;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Employee Salary Data</h1>
+        <form action="add_employee_data" method="post">
+            {% csrf_token %}
+            <div>
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div>
+                <label for="card_number">Card Number:</label>
+                <input type="text" id="card_number" name="card_number" required>
+            </div>
+            <div>
+                <label for="amount">Amount:</label>
+                <input type="number" id="amount" name="amount" required>
+            </div>
+            <div>
+                <label for="date">Date:</label>
+                <input type="date" id="date" name="date" required>
+            </div>
+            <div>
+                <input type="submit" value="Add Sample Data">
+            </div>
+        </form>
+        
+
+        <h1>Employee Salary Data Table</h1>
+        <table id="sampleDataTable">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Name</th>
+                    <th>Card_Number</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th>Delete</th>
+                    <th>Update</th>
+                </tr>
+            </thead>
+            {% for employee in EmployeeData %}
+            <tbody>
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{employee.name}}</td>
+                    <td>{{employee.card_number}}</td>
+                    <td>{{employee.amount}}</td>
+                    <td>{{employee.date}}</td>
+                    <td><a class="btn" href="delete_employee_data/{{employee.id}}">Delete</a></td>
+                    <td><a class="btn" href="update_employee_data/{{employee.id}}">Update</a></td>
+
+                </tr>
+            </tbody>
+            {% endfor %}
+        </table>
+        <br>
+        <button><a href="{% url 'Admin_payment' %}" >BACK</a></button>
+        <br>
+        
+    </div>
+
+    <!-- JavaScript to handle form submission, delete, and edit buttons -->
+    <script>
+        const form = document.getElementById('sampleDataForm');
+        const tableBody = document.querySelector('#sampleDataTable tbody');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value;
+            const cardNumber = document.getElementById('card_number').value;
+            const amount = document.getElementById('amount').value;
+            const date = document.getElementById('date').value;
+
+            const newRow = `<tr>
+                                <td>${name}</td>
+                                <td>${cardNumber}</td>
+                                <td>${amount}</td>
+                                <td>${date}</td>
+                                <td class="action-btns">
+                                    <button class="delete-btn" onclick="deleteRow(this)">Delete</button>
+                                    <button class="edit-btn" onclick="editRow(this)">Edit</button>
+                                </td>
+                            </tr>`;
+            
+            tableBody.insertAdjacentHTML('beforeend', newRow);
+            form.reset();
+        });
+
+        function deleteRow(button) {
+            const row = button.closest('tr');
+            row.remove();
+        }
+
+        function editRow(button) {
+            const row = button.closest('tr');
+            const cells = row.querySelectorAll('td');
+
+            // Retrieve data from the row cells
+            const name = cells[0].textContent;
+            const cardNumber = cells[1].textContent;
+            const amount = cells[2].textContent;
+            const date = cells[3].textContent;
+
+            // Populate form fields with data for editing
+            document.getElementById('name').value = name;
+            document.getElementById('card_number').value = cardNumber;
+            document.getElementById('amount').value = amount;
+            document.getElementById('date').value = date;
+
+            // Remove the row after editing
+            row.remove();
+        }
+    </script>
+
+
+</body>
+</html>

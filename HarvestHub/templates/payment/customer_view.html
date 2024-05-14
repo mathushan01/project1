@@ -1,0 +1,129 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Details</title>
+    <link rel="stylesheet" href="path/to/styles.css">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url("{%static 'images/payment/view_border.jpg'%}");
+            background-repeat: no-repeat;
+            background-size: cover;
+            margin: 0;
+            padding: 130px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background: rgb(240,203,219);
+            background: radial-gradient(circle, rgba(240,203,219,1) 0%, rgba(239,239,187,1) 100%);
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .table th, .table td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        .table th {
+            background-color: #478d86;
+            color: white;
+        }
+
+        .table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .table tr:hover {
+            background-color: #ddd;
+        }
+
+        .text-primary {
+            color: #11516f;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .btn {
+            background-color: #42b120;
+            border-color: #3118bb;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 20px;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background-color: #087b2e;
+        }
+
+        .logo {
+    width: 50px; 
+}
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="{% static 'images/payment/view.png'%}" alt="Logo" class="logo">
+        <form action="Home" method="">
+            {% csrf_token %}
+            <h2 class="text-primary text-center">
+                View Your Billing Details
+            </h2>
+            <br>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>S.No</th>
+                        <th>Full Name</th>
+                        <th>Email</th>
+                        <th>Address</th>
+                        <th>State</th>
+                        <th>Zip</th>
+                        <th>Update</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                {% for data in data %}
+                <tbody>
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ data.Name }}</td>
+                        <td>{{ data.Email }}</td>
+                        <td>{{ data.Address }}</td>
+                        <td>{{ data.State }}</td>
+                        <td>{{ data.Zip }}</td>
+                        <td><a class="btn" href="updateData/{{data.id}}">Update</a></td>
+                        <td><a class="btn1" href="deleteData/{{data.id}}">Delete</a></td>
+                    </tr>
+                </tbody>
+                {%endfor%}
+            </table>
+            
+        </form>
+        <a href="Home" class="btn">Back</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,104 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update</title>
+    <link rel="stylesheet" href="{% static 'CSS/payment/bootstrap.min.css' %}">
+    <style>
+        body{
+            background-image: url("{% static 'images/payment/theme.webp' %}");
+            background-size: cover;
+            background-attachment: fixed;
+        }
+        .container {
+            background-image: url("{% static 'images/payment/theme2.jpg' %}");
+            background-size: cover;
+            background-attachment: fixed;
+            padding: 40px;
+            color: aliceblue;
+            font-family: "Permanent Marker", cursive;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            margin-top: 40px;
+        }
+        h3 {
+            margin-bottom: 30px;
+            color: #FFF8DC; /* light creamy color */
+        }
+        label {
+            font-size: 1.2em;
+            margin-top: 15px;
+        }
+        input[type="text"], input[type="submit"] {
+            margin-top: 10px;
+            border-radius: 8px;
+        }
+        .btn-primary {
+            background-color: #5c85d6;
+            border-color: #5376b3;
+        }
+
+        .btn-primary:hover {
+            background-color: #4a6da7;
+            border-color: #40597c;
+        }
+        .btn-back {
+            background-color: #f64f59;  /* Tomato red */
+            border-color: #ee5253; /* A shade darker */
+            color: white;
+        }
+        .btn-back:hover {
+            background-color: #c0392b;
+            border-color: #cd6155;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <form action="/payment/updateData/{{ data.id }}" method="post">
+        {% csrf_token %}
+        <h3>Update Details</h3>
+
+        <label for="fname">Full Name</label>
+        <input type="text" id="fname" class="form-control" value="{{ data.Name }}" name="firstname">
+
+        <label for="email">Email</label>
+        <input type="text" id="email" class="form-control" value="{{ data.Email }}" name="email">
+
+        <label for="adr">Address</label>
+        <input type="text" id="adr" class="form-control" value="{{ data.Address }}" name="address">
+
+        <label for="state">State</label>
+        <input type="text" id="state" class="form-control" value="{{ data.State }}" name="state">
+
+        <label for="zip">Zip</label>
+        <input type="text" id="zip" class="form-control" value="{{ data.Zip }}" name="zip">
+
+        <input type="submit" value="Update" class="btn btn-primary mt-4">
+    </form>
+    <form action="{% url 'View_Details' %}" method="get">
+        <input type="submit" value="Back" class="btn btn-back mt-2">
+    </form>
+</div>
+
+<script>
+    // Placeholder for any JavaScript you might want to add
+    document.addEventListener("DOMContentLoaded", function() {
+        // Example: Alert on form submission - This can be changed or expanded as needed.
+        const form = document.querySelector("form");
+        form.addEventListener("submit", function(event) {
+            // Prevent the form from submitting
+            event.preventDefault();
+            
+            // Example functionality: Alerting
+            alert("Update Your Details!");
+            
+            // To proceed with the form submission uncomment the next line
+            form.submit();
+        });
+    });
+</script>
+
+</body>
+</html>

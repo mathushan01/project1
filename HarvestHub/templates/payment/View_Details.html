@@ -1,0 +1,218 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Details</title>
+    <style>
+        body {
+            background-image: url("{%static 'images/payment/theme.webp'%}");
+            background-size: cover;
+            background-attachment: fixed;
+            font-family: "Permanent Marker" , cursive;
+            font-size: 17px;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .table, .table th, .table td {
+            border: 1px solid #ddd;
+        }
+        .table th, .table td {
+            text-align: left;
+            padding: 8px;
+        }
+        .table th {
+            background-color: #478d86;
+            color: white;
+        }
+        .table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .table tr:hover {
+            background-color: #ddd;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .text-primary {
+            color: #11516f;
+        }
+        .btn {
+            background-color: #42b120;
+            border-color: #3118bb;
+            color: rgb(26, 24, 24);
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            border-radius: 8px;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .btn:hover {
+            background-color: #087b2e;
+        }
+        .btn1 {
+            background-color: #ce2a14;
+            color: rgb(16, 14, 14);
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            text-align: center;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .btn1:hover {
+            background-color: #6e4135;
+        }
+        .btn2 {
+            background-color: #3118bb;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            text-align: center;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .btn2:hover {
+            background-color: #0c1922;
+        }
+
+        .b_id {
+           background-color: #3058ae;
+           color: white;
+           padding: 8px 15px;
+           padding-top: 8px;
+           border-radius: 11px;
+           border: none;
+           font-size: larger;
+           cursor: pointer;
+           transition: all 0.3s ease; 
+           text-decoration: none; 
+        }
+
+         .b_id:hover {
+             box-shadow: 0 0 15px #010d06; /* Adds a glow effect on hover */
+             transform: translateY(-3px); /* Slight lift effect */
+        }
+
+           .b_id:active {
+                transform: translateY(1px); /* Simulates button press down effect */
+           }
+           .search-container {
+             margin: 20px auto;
+             text-align: center;
+          }
+
+             .search-input {
+             padding: 10px;
+             margin-bottom: 20px;
+             width: 50%; /* Adjust width as needed */
+             border-radius: 10px;
+             box-sizing: border-box;
+             border: 3px solid #171111;
+      }
+      
+    </style>
+</head>
+<body>
+    <div class="col-md-60">
+        {% if Billing_Address %}
+        <form action="Home" method="post">
+            {% csrf_token %}
+            <h2 class="Page-header- text-primary text-center"> View Details</h2>
+            <br>
+            <div class="search-container text-center">
+                <input type="text" id="searchBox" placeholder="Search by Name..." class="search-input">
+            </div>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>S.No</th>
+                        <th>Full_Name</th>
+                        <th>Email</th>
+                        <th>Address</th>
+                        <th>State</th>
+                        <th>Zip</th>
+                        <th>Update</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                {% for data in Billing_Address %}
+                <tbody>
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ data.Name }}</td>
+                        <td>{{ data.Email }}</td>
+                        <td>{{ data.Address }}</td>
+                        <td>{{ data.State }}</td>
+                        <td>{{ data.Zip }}</td>
+                        <td><a class="btn" href="updateData/{{data.id}}">Update</a></td>
+                        <td><a class="btn1" href="deleteData/{{data.id}}">Delete</a></td>
+                    </tr>
+                </tbody>
+                {% endfor %}
+            </table>
+            {% endif %}
+            <br>
+            <div>
+                <button class="b_id">
+                    <a href="Admin_payment">Back</a>
+                </button>
+            </div>
+            <br>
+            <button><a href="{% url 'salary_pdf' %}" target="_blank">Generate PDF</a></button>
+        </form>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const searchBox = document.getElementById('searchBox');
+            searchBox.addEventListener('keyup', function() {
+                const searchTerm = searchBox.value.toLowerCase();
+                document.querySelectorAll('.table tbody tr').forEach(function(row) {
+                    const cells = row.getElementsByTagName('td');
+                    let found = false;
+                    for (let i = 0; i < cells.length; i++) {
+                        if (cells[i].textContent.toLowerCase().indexOf(searchTerm) > -1) {
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (found) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+    const searchBox = document.getElementById('searchBox');
+    searchBox.addEventListener('keyup', function() {
+        const searchTerm = searchBox.value.toLowerCase();
+        document.querySelectorAll('.table tbody tr').forEach(function(row) {
+            const cell = row.cells[1]; // Assumes the second cell contains the name
+            if (cell.textContent.toLowerCase().indexOf(searchTerm) > -1) {
+                row.style.display = ''; // Show the row
+            } else {
+                row.style.display = 'none'; // Hide the row
+            }
+        });
+    });
+});
+
+        </script>
+        
+</body>
+</html>

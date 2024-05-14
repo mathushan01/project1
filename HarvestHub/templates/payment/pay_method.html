@@ -1,0 +1,171 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Page</title>
+    <link rel="stylesheet" href="{% static 'payment/styles.css' %}">
+</head>
+
+<style>
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-image: url("{%static 'images/payment/card.webp'%}");
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 70vh;
+}
+
+.payment-form {
+    background: rgb(165,76,225);
+    background: linear-gradient(90deg, rgb(186, 116, 233) 0%, rgb(207, 112, 112) 50%, rgb(236, 200, 149) 100%);
+    padding: 40px;
+    border-radius: 15px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+    max-width: 480px;
+    width: 100%;
+    text-align: center;
+}
+
+.form-title {
+    color: #080606;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    color: #0a0909;
+    font-weight: bold;
+}
+
+.form-group input,
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #111111;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.form-text {
+    font-size: 15px;
+    color: #0b0b0b;
+}
+
+.btn-pay {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-pay:hover {
+    background-color: #3618bf;
+}
+@keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    .fade-in {
+        animation: fadeIn 1.5s ease-out;
+    }
+
+</style>
+<body>
+    <h1 class="form-title">Bank-Receipt Method </h1>
+<div class="container">
+    <div class="payment-form">
+        <form id="paymentForm" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div>
+                <h4>Please choose the correct bankReceipt</h4>
+            </div>
+            <button type="submit" class="btn-pay">Pay Now</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const paymentForm = document.getElementById('paymentForm');
+        const container = document.querySelector('.container'); // Select the container
+        container.classList.add('fade-in'); // Add the class that triggers the animation
+    
+        // Function to handle form submission
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            alert('Form submitted successfully!');
+        }
+    
+        // Event listener for form submission
+        paymentForm.addEventListener('submit', handleFormSubmit);
+    
+        // Button hover effects
+        const btnPay = document.querySelector('.btn-pay');
+        btnPay.addEventListener('mouseover', function() {
+            this.style.backgroundColor = '#45a049';
+        });
+    
+        btnPay.addEventListener('mouseout', function() {
+            this.style.backgroundColor = '#4CAF50';
+        });
+    });
+    </script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const paymentForm = document.getElementById('paymentForm');
+            const fileInput = document.getElementById('bankReceipt'); // Get the file input by ID
+            const container = document.querySelector('.container');
+            container.classList.add('fade-in'); // Add fade-in animation
+        
+            paymentForm.addEventListener('submit', function(event) {
+                if (fileInput.files.length === 0) {
+                    event.preventDefault(); // Prevent form submission
+                    alert('Please upload a file to proceed with the payment.');
+                } else {
+                    alert('Form submitted successfully!');
+                }
+            });
+        
+            // Button hover effects
+            const btnPay = document.querySelector('.btn-pay');
+            btnPay.addEventListener('mouseover', function() {
+                this.style.backgroundColor = '#45a049';
+            });
+        
+            btnPay.addEventListener('mouseout', function() {
+                this.style.backgroundColor = '#4CAF50';
+            });
+        });
+        </script>
+        
+</body>
+</html>

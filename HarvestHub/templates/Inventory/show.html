@@ -1,0 +1,68 @@
+{% extends "layouts/main.html" %}
+ 
+{% block title %} Inventory Records{% endblock title %}
+
+ 
+{% block content %}
+<br>
+<br>
+<br>
+
+ <div class="col-md-12">
+    <span><a href="/Inventory/addnew" class="btn btn-primary">Add New Record</a></span>
+      
+
+    <div class="table-responsive">
+      <table id="bootstrapdatatable" class="table table-striped table-bordered" width="100%">
+         <thead>
+            <th><input type="checkbox" id="checkall" /></th>
+            <th>ID</th>
+            <th>Crop Name</th>
+            <th>Crop Type</th>
+            <th>Image</th>
+            <th>Quantity</th>
+            <th>Expiry Date</th>
+            <th>Supplier</th>
+            <th>pricePerUnit</th>
+            <th>Status</th>
+            <th>Edit</th>
+            <th>Delete</th>
+         </thead>
+         <tbody>
+            {% for inventory in inventories %}
+            <tr>
+               <td><input type="checkbox" class="checkthis"></td>
+               <td>{{inventory.id}}</td>
+               <td>{{inventory.cropName}}</td>
+               <td>{{inventory.cropType}}</td>
+               <td>{{inventory.image}}</td>
+               <td>{{inventory.quantity}}</td>
+               <td>{{inventory.expiryDate}}</td>
+               <td>{{inventory.supplier}}</td>
+               <td>{{inventory.pricePerUnit}}</td>
+               <td>{{inventory.status}}</td>
+               <td><a href="/Inventory/edit/{{ inventory.id }}" class="btn btn-primary">Edit</a></td>
+               <td><a href="/Inventory/delete/{{ inventory.id }}" class="btn btn-danger">Delete</a></td>
+            </tr>
+            {% endfor %}
+         </tbody>
+      </table>
+    </div>
+ </div>
+ 
+ {% endblock content %}
+ {% block scripts %}
+ <script src="https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src = "https://cdn.datatables.net/1.12.0/js/jquery.dataTables.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        $('#bootstrapdatatable').DataTable({     
+          "aLengthMenu": [[3, 5, 10, 25, -1], [3, 5, 10, 25, "All"]],
+            "iDisplayLength": 3
+           } 
+        );
+    } );
+   </script>
+ {% endblock scripts %}
+ 

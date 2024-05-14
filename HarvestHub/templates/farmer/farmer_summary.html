@@ -1,0 +1,208 @@
+{% extends 'layouts/main.html' %}
+{% load static %}
+{% block head %}
+  <script src="https://www.gstatic.com/charts/loader.js"></script>
+  <style>
+    body{
+      background-color:	#f3f6fd;
+    }
+  </style>
+
+{% endblock head %}
+{% block title %}
+  Summary
+{% endblock title %}
+{% block content %}
+
+<div style="margin-top: 12vh;">
+
+  <div style="height: 12vw; background-color: #FFFFFF; margin:2vw;padding:2vw 4vw;" >
+    <h2 style="margin-top: 3vh;">Welcome, {{request.user}}!</h2>
+    <p>Agriculture is the backbone of civilization, providing sustenance and resources essential for human survival.<br> It encompasses a wide range 
+        of practices, from crop cultivation to livestock rearing, shaping landscapes and economies worldwide.
+    </p>
+    <a href="{% url 'generate_pdf_report' %}"  onclick="return confirm('Are you sure? to Download')"  class="btn btn-success btn-sm" 
+      style="position: absolute; right: 8vw;top:26vh;"><i class="fas fa-cloud-download-alt"></i> Download The Report
+    </a>
+  </div>
+  <div style="display: flex; justify-content: space-around;margin:2vw;">
+
+    <div style="width: 16vw; height: 12vw; background-color: #FFFFFF;">
+      <h2 style="padding: 10px;text-align:center; margin-top: 4vh;">Revenue</h2>
+      <h2 style="padding: 10px;text-align:center; color:#ed637f" id="revenue"></h2>
+    </div>
+
+    <div style="width: 16vw; height: 12vw; background-color: #FFFFFF;">
+      <h2 style="padding: 10px;text-align:center; margin-top: 4vh;">Income</h2>
+      <h2 style="padding: 10px;text-align:center; color:#4590e7" id="income"></h2>
+    </div>
+
+    <div style="width: 16vw; height: 12vw; background-color: #FFFFFF;">
+      <h2 style="padding: 10px;text-align:center; margin-top: 4vh;">Expence</h2>
+      <h2 style="padding: 10px;text-align:center; color:#29d8b3" id="expence"></h2>
+    </div>
+
+    <div style="width: 16vw; height: 12vw; background-color: #FFFFFF;">
+      <h2 style="padding: 10px;text-align:center; margin-top: 4vh;">Crop Count</h2>
+      <h2 style="padding: 10px;text-align:center; color:#ffb44d" id="count"></h2>
+    </div>
+
+  </div>
+
+  <div style="display: flex; justify-content: space-around;">
+    <div id="myLineChart" style="width:100%; max-width:48vw; height:500px;"></div>
+    <div id="myPieChart" style="width:100%; max-width:48vw; height:500px;"></div>
+  </div>
+  
+</div>
+
+
+<script>
+  google.charts.load('current', {'packages':['corechart']});  
+  google.charts.setOnLoadCallback(drawCharts);
+
+  function drawCharts() {
+    drawAreaChart();
+    drawPieChart();
+  }
+
+  function drawAreaChart() {
+
+    const salesByDate = {};
+    const cartByDate = {};
+
+    {% for sale in sales %}
+      var saleDate = '{{ sale.created_at | date:"Y-m-d" }}';
+      var amount = {{ sale.total_amount }};
+      if (salesByDate[saleDate]) {
+        salesByDate[saleDate] += amount;
+      } else {
+        salesByDate[saleDate] = amount;
+      }
+    {% endfor %}
+
+    {% for item in cart %}
+        var cartDate = '{{ item.created_at | date:"Y-m-d" }}'; 
+        var amount = {{ item.total_cost }}; 
+        if (cartByDate[cartDate]) {
+            cartByDate[cartDate] += amount;
+        } else {
+            cartByDate[cartDate] = amount;
+        }
+    {% endfor %}
+
+    const aggregatedSales = Object.keys(salesByDate).map(saleDate => [saleDate, salesByDate[saleDate]]);
+    const aggregatedCart = Object.keys(cartByDate).map(cartDate => [cartDate, cartByDate[cartDate]]);
+    const combinedData = [['Date', 'Revenue', 'Expenses'], ...aggregatedSales.map(([date, revenue]) => [date, revenue, cartByDate[date] || 0])];
+    const areaData = google.visualization.arrayToDataTable(combinedData);
+
+    let expence = 0;
+    aggregatedCart.forEach(cartItem => {
+      expence += cartItem[1];
+    });
+    //console.log(sumOfAmounts);
+    document.getElementById("expence").innerHTML = expence;
+
+    let income = 0;
+    aggregatedSales.forEach(saleDate => {
+      income += saleDate[1];
+    });
+    document.getElementById("income").innerHTML = income;
+
+    var revenue = income - expence;
+    document.getElementById("revenue").innerHTML = revenue;
+
+    const areaOptions = {
+      title: 'Farmer Performance',
+      titlePosition: 'center',
+    
+      hAxis: { 
+        title: 'Date',
+        titleTextStyle: {
+          color: 'red', // Customize hAxis title color
+          fontSize: 16 // Customize hAxis title size
+        },
+        textStyle: {
+          color: 'blue', // Customize hAxis text color
+          fontSize: 12 // Customize hAxis text size
+        }
+      },
+    
+      vAxis: { 
+        title: '',
+        textStyle: {
+          color: 'blue', // Customize vAxis text color
+          fontSize: 12 // Customize vAxis text size
+        }
+      },
+      
+      legend: '',
+      titleTextStyle: {
+        fontSize: 24,
+        color: 'red',
+        bold: true,
+        italic: true,
+        position: 'in'
+      },
+      colors: ['lightgreen', 'lightblue'], // Set colors for sales and expenses
+        series: {
+            0: { color: 'green' }, // Set color for sales
+            1: { color: 'blue' } // Set color for expenses
+        }
+    };    
+  
+    const areaChart = new google.visualization.AreaChart(document.getElementById('myLineChart'));
+    areaChart.draw(areaData, areaOptions);
+  }
+
+  function drawPieChart() {
+
+    const nameAmountMap = {};
+    {% for sale in sales %}
+      var name = '{{ sale.name }}';
+      var amount = {{ sale.total_amount }};
+      
+      if(nameAmountMap.hasOwnProperty(name)) {
+        nameAmountMap[name] += amount;
+      } 
+      else {
+        nameAmountMap[name] = amount;
+      }
+    {% endfor %}
+
+    var nameCount = Object.keys(nameAmountMap).length;
+    var nameCount = "0" + nameCount
+    document.getElementById("count").innerHTML = nameCount;
+    //console.log(nameCount);
+
+    const pieChartData = [];
+    for (const name in nameAmountMap) {
+      if (nameAmountMap.hasOwnProperty(name)) {
+        pieChartData.push([name, nameAmountMap[name]]);
+      }
+    }
+
+    const pieData = google.visualization.arrayToDataTable([
+      ['Name', 'Amount'],
+      ...pieChartData
+    ]);
+
+    const pieOptions = {
+      title: 'Crop Income',
+      is3D: true,
+      titleTextStyle: {
+        fontSize: 24,
+        color: 'red',
+        bold: true,
+        italic: true,
+        position: 'in'
+      }
+    };
+
+    const pieChart = new google.visualization.PieChart(document.getElementById('myPieChart'));
+    pieChart.draw(pieData, pieOptions);
+  }
+
+</script>
+
+{% endblock content %}

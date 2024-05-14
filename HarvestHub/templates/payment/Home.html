@@ -1,0 +1,233 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing Address</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-image: url("{%static 'images/payment/home.jpg'%}");
+        background-repeat: no-repeat;
+        background-size: cover;
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 10px auto;
+        padding: 20px;
+        background: rgb(98, 116, 206);
+        background: radial-gradient(circle, rgb(123, 133, 181) 0%, rgb(203, 139, 158) 100%);
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .title {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-row {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .form-column {
+        flex-basis: 48%;
+    }
+
+    .input-field {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .checkbox-label {
+        display: block;
+        margin-bottom: 15px;
+        font-size: 14px;
+    }
+
+    .btn {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        background-color: #31cc16;
+        color: #fff;
+        font-size: 16px;
+        margin-top: 10px;
+    }
+
+    .btn-secondary {
+        background-color: #1f1a90;
+    }
+
+    .btn1 {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        background-color: #df3232;
+        color: #fff;
+        font-size: 16px;
+        margin-top: 10px;
+    }
+
+    .btn1-secondary {
+        background-color: #1f1a90;
+    }
+    .btn2{
+        background-color: aqua;
+        color: black;
+    }
+
+    .poda {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .btn, .btn1 {
+        flex: auto;
+        margin: 0 5px;
+    }
+
+    .logo {
+        width: 50px;
+    }
+
+    @keyframes slideInFromLeft {
+        0% {
+            transform: translateX(-100%);
+        }
+
+        100% {
+            transform: translateX(0);
+        }
+    }
+
+    .slide-in {
+        animation: 1s ease-out 0s 1 slideInFromLeft;
+    }
+</style>
+
+<body>
+
+<div class="container">
+    <img src="{% static 'images/payment/bill.png'%}" alt="Logo" class="logo">
+    <h1 class="title">
+        Customer Billing Details
+    </h1>
+    <form id="paymentForm" action="addData" method="post" onsubmit="return validateForm()" class="form">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="fname">Full Name</label>
+            <input type="text" id="fname" name="firstname" class="input-field">
+        </div>
+
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="text" id="email" name="email" class="input-field">
+        </div>
+
+        <div class="form-group">
+            <label for="adr">Address</label>
+            <input type="text" id="adr" name="address" class="input-field">
+        </div>
+
+        <div class="form-row">
+            <div class="form-column">
+                <label for="state">State</label>
+                <input type="text" id="state" name="state" class="input-field">
+            </div>
+            <div class="form-column">
+                <label for="zip">Zip</label>
+                <input type="text" id="zip" name="zip" class="input-field">
+            </div>
+        </div>
+
+        <label class="checkbox-label">
+            <input type="checkbox" checked="checked" name="sameadr"> Shipping address same as billing
+        </label>
+        <div class="poda">
+            <input type="submit" value="Continue to HarvestHub" class="btn" name="Continue to HarvestHub">
+        </div>
+    </form>
+<br>
+    <form action="customer_view" method="post">
+        {% csrf_token %}
+        <input type="submit" value="View Details" class="btn btn2">
+    </form>
+<br>
+<div>
+    <form id="paymentForm" action="card_method" method="post">
+        {% csrf_token %}
+            <input type="submit" value="Card-Payment" class="btn btn-secondary">
+    </form>
+<br>
+    <form id="paymentForm" action="pay_method" method="post">
+        {% csrf_token %}
+            <input type="submit" value="Bank-Receipt" class="btn btn-secondary">
+    </form>
+    
+    
+</div>
+
+</body>
+
+<script>
+    function validateForm() {
+        var nameInput = document.getElementById('fname');
+        var name = nameInput.value.trim(); // Remove leading/trailing spaces
+        if (!name.match(/^[a-zA-Z ]+$/)) {
+            alert("Error: Name must only contain letters.");
+            nameInput.focus(); // Focus on the input field
+            return false;
+        }
+        return true;
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const paymentForm = document.getElementById('paymentForm');
+        const container = document.querySelector('container'); // Select the container
+        container.classList.add('slide-in'); // Add the class that triggers the animation
+
+        // Function to handle form submission
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            // Perform form validation and submission logic here
+            alert('Form submitted successfully!');
+        }
+
+        // Event listener for form submission
+        paymentForm.addEventListener('submit', handleFormSubmit);
+
+        // Button hover effect
+        const btnPay = document.querySelector('.btn-pay');
+        btnPay.addEventListener('mouseover', function() {
+            this.style.backgroundColor = '#45a049';
+        });
+
+        btnPay.addEventListener('mouseout', function() {
+            this.style.backgroundColor = '#4CAF50';
+        });
+    });
+</script>
+
+</html>

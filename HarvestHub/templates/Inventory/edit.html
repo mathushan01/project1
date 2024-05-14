@@ -1,0 +1,57 @@
+{% extends "layouts/main.html" %}
+ 
+{% block title %}Add New Inventory Records{% endblock title %}
+ 
+{% block content %}
+
+
+<div class="col-md-12">
+    <form method="POST" class="post-form" action="/Inventory/update/{{inventory.id}}" enctype="multipart/form-data">  
+    {% csrf_token %}  
+    <br><br><br>
+    <div class="container">  
+        <div class="col-12">  
+            <h3>Update Details</h3>  
+        </div>
+        <div class="mb-3">
+            <label>Inventory ID:</label>  
+            <input type="text" class="form-control" name="id" id="id_id" required maxlength="20" value="{{ inventory.id }}"/>    
+        </div>
+        <div class="mb-3">
+            <label>Crop Name:</label>  
+            <input type="text" class="form-control" name="cropName" id="id_cropName" required maxlength="100" value="{{ inventory.cropName }}" />  
+        </div>
+        <div class="mb-3">
+            <label>Crop Type:</label>  
+            <input type="text" class="form-control" name="cropType" id="id_cropType" required maxlength="254" value="{{ inventory.cropType }}" />  
+        </div>
+        <div class="mb-3">
+            <label>Image:</label>  
+            <input type="file" class="form-control" name="image" id="id_image" required maxlength="15" value="{{ inventory.image }}" />  
+        </div>
+        <div class="mb-3">
+            <label>Quantity:</label>  
+            <input type="text" class="form-control" name="quantity" id="id_quantity" required maxlength="15" value="{{ inventory.quantity }}" />  
+        </div>
+        <div class="mb-3">
+            <label>Expiry Date:</label>  
+            <input type="date" class="form-control" name="expiryDate" id="id_expiryDate" required maxlength="15" value="{{ inventory.expiryDate }}" />  
+        </div>  
+        <div class="mb-3">
+            <label>Supplier:</label>  
+            <input type="text" class="form-control" name="supplier" id="id_supplier" required maxlength="15" value="{{ inventory.supplier }}" />  
+        </div>
+        <div class="mb-3">
+            <label>Price Per Unit:</label>  
+            <input type="text" class="form-control" name="pricePerUnit" id="id_pricePerUnit" required maxlength="15" value="{{ inventory.pricePerUnit }}" />  
+        </div>
+               <div class="mb-3">
+            <label>Status:</label>  
+            <input type="text" class="form-control" name="status" id="id_status" required maxlength="15" value="{{ inventory.status }}" />  
+        </div>
+        <div class="mb-3">
+            <button type="submit" class="btn btn-success btn-lg">Update</button>  
+        </div>
+    </div>  
+    </form>  
+{% endblock content %}
